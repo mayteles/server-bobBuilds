@@ -2,13 +2,16 @@ const express = require("express");
 const httpStatus = require("http-status");
 const dataBaseConnection = require("./src/ecommerce/config/database.config");
 const cors = require("cors");
-const authRouter = require("./src/ecommerce/model/auth.route.js");
+const authRouter = require("./src/ecommerce/routes/auth.route.js");
+const ProductModel = require("./src/ecommerce/model/product.model.js");
+const cartRouter = require("./src/ecommerce/routes/cart.route.js");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/cart", cartRouter);
 
 app.get("/", (req, res) => {
   res
