@@ -37,7 +37,7 @@ const updateProductFromCart = async (req, res) => {
 };
 
 const getUserCart = async (req, res) => {
-  const { user } = req.body;
+  const { user } = req;
   try {
     let cartProducts = await CartModel.find({ user: user._id });
     return res
