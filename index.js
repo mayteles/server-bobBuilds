@@ -2,10 +2,13 @@ const express = require("express");
 const httpStatus = require("http-status");
 const dataBaseConnection = require("./src/ecommerce/config/database.config");
 const cors = require("cors");
+const authRouter = require("./src/ecommerce/model/auth.route.js");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/v1/auth", authRouter);
 
 app.get("/", (req, res) => {
   res
