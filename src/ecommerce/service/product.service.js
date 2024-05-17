@@ -1,3 +1,4 @@
+const httpStatus = require("http-status");
 const ProductModel = require("../model/product.model");
 
 const createProducts = async (req, res) => {
@@ -86,3 +87,32 @@ const createProducts = async (req, res) => {
     ]);
   } catch (error) {}
 };
+
+const getAllProducts = async (req, res) => {
+  const { category } = req.query;
+  let filter = {};
+  if (category) filter.category = category;
+
+  try {
+    let products = await ProductModel.find({ filter });
+    return res
+      .status(httpStatus.OK)
+      .json({ data: products, message: "Product's Fetched Success" });
+  } catch (error) {
+    return res.status(httpStatus.BAD_REQUEST).json({ message: error.message });
+  }
+};
+const getProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let product = await ProductModel.findById(id);
+    return res
+      .status(httpStatus.OK)
+      .json({ data: product, message: "Product Fetched Success" });
+  } catch (error) {
+    return res.status(httpStatus.BAD_REQUEST).json({ message: error.message });
+  }
+};
+
+module.exports = { createProducts, getAllProducts, getProduct };
