@@ -10,5 +10,5 @@ cartRouter.post("/", cartController.addCartProduct);
 cartRouter.patch("/:id", cartController.updateCart);
 
 cartRouter.delete("/:id", cartController.deleteCartProduct);
-
+cartRouter.post("/checkout", cartController.handleCheckout);
 module.exports = cartRouter;

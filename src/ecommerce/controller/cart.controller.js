@@ -15,10 +15,13 @@ const deleteCartProduct = async (req, res) => {
 const queryUserCart = async (req, res) => {
   return cartService.getUserCart(req, res);
 };
+const handleCheckout = async (req, res) => {
+  return cartService.cartCheckout(req, res);
+};
 
 module.exports = {
   addCartProduct,
   updateCart,
   deleteCartProduct,
-  queryUserCart,
+  queryUserCart,handleCheckout
 };

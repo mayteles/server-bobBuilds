@@ -1,9 +1,11 @@
 const httpStatus = require("http-status");
 const CartModel = require("../model/cart.model");
+const { createNewOrder } = require("../controller/order.controller");
 
 const addProductInCart = async (req, res) => {
+  const { user } = req;
   try {
-    await CartModel(req.body).save();
+    await CartModel({ ...req.body, user: user._id }).save();
     return res
       .status(httpStatus.CREATED)
       .json({ message: "Product added in cart success" });
@@ -39,7 +41,9 @@ const updateProductFromCart = async (req, res) => {
 const getUserCart = async (req, res) => {
   const { user } = req;
   try {
-    let cartProducts = await CartModel.find({ user: user._id });
+    let cartProducts = await CartModel.find({ user: user._id }).populate(
+      "product"
+    );
     return res
       .status(httpStatus.OK)
       .json({ data: cartProducts, message: "Cart Fetched Success" });
@@ -48,9 +52,22 @@ const getUserCart = async (req, res) => {
   }
 };
 
+const cartCheckout = async (req, res) => {
+  const { cart } = req.body;
+  try {
+    await createNewOrder(req, res);
+    let cartArrays = cart.map((el) => el._id);
+    await CartModel.deleteMany({ _id: { $in: cartArrays } });
+
+    return res
+      .status(httpStatus.OK)
+      .json({ data: cartProducts, message: "Checkout Success" });
+  } catch (error) {}
+};
 module.exports = {
   updateProductFromCart,
   deleteProductFromCart,
   addProductInCart,
   getUserCart,
+  cartCheckout,
 };

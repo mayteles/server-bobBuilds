@@ -2,8 +2,9 @@ const httpStatus = require("http-status");
 const OrderModel = require("../model/order.model");
 
 const createOrder = async (req, res) => {
+  const { user } = req;
   try {
-    await OrderModel(req.body).save();
+    await OrderModel({ ...req.body, user: user._id }).save();
     return res
       .status(httpStatus.CREATED)
       .json({ message: "Order Created Success" });
@@ -13,7 +14,7 @@ const createOrder = async (req, res) => {
 };
 
 const getUserOrders = async (req, res) => {
-  const { user } = req.body;
+  const { user } = req;
   try {
     let orders = await OrderModel.find({ user: user._id });
     return res
