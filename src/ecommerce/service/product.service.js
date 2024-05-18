@@ -89,12 +89,18 @@ const createProducts = async (req, res) => {
 };
 
 const getAllProducts = async (req, res) => {
-  const { category } = req.query;
+  const { category, search } = req.query;
   let filter = {};
   if (category) filter.category = category;
 
+  const regex = new RegExp(search, "i");
+
+  const query = {
+    ...filter,
+    title: { $regex: regex },
+  };
   try {
-    let products = await ProductModel.find({ filter });
+    let products = await ProductModel.find(query);
     return res
       .status(httpStatus.OK)
       .json({ data: products, message: "Product's Fetched Success" });
